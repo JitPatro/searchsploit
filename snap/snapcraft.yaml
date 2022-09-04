@@ -1,0 +1,72 @@
+name: searchsploit
+title: Searchsploit
+base: core20
+adopt-info: searchsploit
+
+license: GPL-3.0-or-later
+source-code: https://github.com/offensive-security/exploitdb
+issues: https://github.com/JitPatro/searchsploit/issues
+
+summary: Searchsploit - Exploit Database Archive Search
+description: |
+  Allows you to search through exploits and shellcodes using one or more terms from Exploit-DB.
+
+  The Exploit Database is an archive of public exploits and corresponding vulnerable software,
+  developed for use by penetration testers and vulnerability researchers. Its aim is to serve as the
+  most comprehensive collection of exploits, shellcode and papers gathered through direct
+  submissions, mailing lists, and other public sources, and present them in a freely-available and
+  easy-to-navigate database. The Exploit Database is a repository for exploits and Proof-of-Concepts
+  rather than advisories, making it a valuable resource for those who need actionable data right
+  away.
+  You can learn more about the project here:- https://www.exploit-db.com/ and
+  here:- https://www.exploit-db.com/history (History).
+
+
+  Installation: `snap install searchsploit`
+
+  Manual: https://www.exploit-db.com/searchsploit
+
+icon: searchsploit.png
+
+grade: stable
+confinement: strict
+compression: lzo
+
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+  - build-on: armhf
+
+environment:
+  PATH: $SNAP/opt/exploitdb:$PATH
+  MAGIC: $SNAP/usr/share/misc/magic
+
+apps:
+  searchsploit:
+    command: opt/exploitdb/searchsploit
+    plugs: [home]
+
+parts:
+  searchsploit:
+    plugin: nil
+    source: https://github.com/offensive-security/exploitdb.git
+    stage-packages:
+      - coreutils
+      - libxml2-utils
+      - file
+
+    override-pull: |
+      snapcraftctl pull
+      VERSION=`cat searchsploit| grep "Version:" | cut -d ":" -f 2 | cut -d" " -f 2`
+      snapcraftctl set-version $VERSION
+
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/opt/exploitdb
+      cp -r ./* ./.*rc $SNAPCRAFT_PART_INSTALL/opt/exploitdb
+      sed -i 's#/opt#$SNAP/opt#g' $SNAPCRAFT_PART_INSTALL/opt/exploitdb/.searchsploit_rc
+      sed -i '1,/## Update database check/!{ /## Update database (via .deb/,/## Update database check/!s/^/##/; }' $SNAPCRAFT_PART_INSTALL/opt/exploitdb/searchsploit
+      sed -i '/"--update"/,+1d' $SNAPCRAFT_PART_INSTALL/opt/exploitdb/searchsploit
+      sed -i '/--update/d' $SNAPCRAFT_PART_INSTALL/opt/exploitdb/searchsploit
+      sed -i '/update;;/d' $SNAPCRAFT_PART_INSTALL/opt/exploitdb/searchsploit
+      sed -i 's/When updating or/When/g' $SNAPCRAFT_PART_INSTALL/opt/exploitdb/searchsploit
+      sed -i 's/cehjmnopstuvwx/cehjmnopstvwx/g' $SNAPCRAFT_PART_INSTALL/opt/exploitdb/searchsploit
