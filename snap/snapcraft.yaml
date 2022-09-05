@@ -54,6 +54,7 @@ parts:
       - coreutils
       - libxml2-utils
       - file
+      - xclip
 
     override-pull: |
       snapcraftctl pull
