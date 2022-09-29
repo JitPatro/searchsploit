@@ -58,8 +58,8 @@ parts:
 
     override-pull: |
       snapcraftctl pull
-      VERSION=`cat searchsploit| grep "Version:" | cut -d ":" -f 2 | cut -d" " -f 2`
-      snapcraftctl set-version $VERSION
+      #VERSION=`cat searchsploit| grep "Version:" | cut -d ":" -f 2 | cut -d" " -f 2`
+      snapcraftctl set-version $(git describe | awk '{ printf "v"$1 }')
 
     override-build: |
       mkdir -p $SNAPCRAFT_PART_INSTALL/opt/exploitdb
