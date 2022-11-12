@@ -44,12 +44,12 @@ environment:
 apps:
   searchsploit:
     command: opt/exploitdb/searchsploit
-    plugs: [home]
+    plugs: [home, x11]
 
 parts:
   searchsploit:
     plugin: nil
-    source: https://github.com/offensive-security/exploitdb.git
+    source: https://gitlab.com/exploit-database/exploitdb.git
     stage-packages:
       - coreutils
       - libxml2-utils
