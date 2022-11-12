@@ -30,7 +30,7 @@ icon: searchsploit.png
 
 grade: stable
 confinement: strict
-compression: lzo
+#compression: lzo
 
 architectures:
   - build-on: amd64
@@ -59,7 +59,7 @@ parts:
     override-pull: |
       snapcraftctl pull
       #VERSION=`cat searchsploit| grep "Version:" | cut -d ":" -f 2 | cut -d" " -f 2`
-      snapcraftctl set-version $(git describe | awk '{ printf "v"$1 }')
+      snapcraftctl set-version $(git describe)
 
     override-build: |
       mkdir -p $SNAPCRAFT_PART_INSTALL/opt/exploitdb
