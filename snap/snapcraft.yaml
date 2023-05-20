@@ -38,7 +38,7 @@ architectures:
   - build-on: armhf
 
 environment:
-  PATH: $SNAP/opt/exploitdb:$PATH
+  PATH: $SNAP/opt/exploitdb:$SNAP/usr/sbin:$SNAP/usr/bin:$SNAP/sbin:$SNAP/bin:$PATH
   MAGIC: $SNAP/usr/share/misc/magic
 
 apps:
